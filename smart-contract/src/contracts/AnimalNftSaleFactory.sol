@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "./AnimalNftSale.sol";
+import "./AnimalNftDonate.sol";
 
 /*
 * P2P 거래 정보를 관리하는 Factory Contract
@@ -22,13 +23,23 @@ contract AnimalNftSaleFactory is Ownable {
         address saleOwner;
     }
     
+    struct Donate {
+        address donateAddress;
+        address donator;
+    }
+
     using Counters for Counters.Counter;
 
     event Withdrawal(address indexed to, uint256 amount);
     event SaleCreated(uint256 indexed saleId, address saleAddr, uint256 ticketId);
     
-    // 거래 생성 시 마다 1씩 증가하는 ID
+    // 거래 생성마다 1씩 증가하는 ID
     Counters.Counter private _saleIds;
+    // 민트 생성마다 1씩 증가하는 ID
+    Counters.Counter private _donateIds;
+
+    // //민트 가격
+    // uint constant MINT_PRICE = 300;
 
     //각 계약에 대한 소유권 명시
     mapping(uint256 => Sale) private _sales;
@@ -39,12 +50,25 @@ contract AnimalNftSaleFactory is Ownable {
     // 특정 지갑이 생성한 거래 ID 목록 => To Much인가? => Id값만 기록되기 때문에 성능에 비해 gas 효율 보통
     mapping(address => uint256[]) private _saleIdsByWallet;
 
+    // 특정 동물에 따른 기부 ID 목록
+    mapping(uint256 => Donate) private _donates;
+
+    // 특정 지갑에 따른 기부 ID 목록
+    mapping(address => uint256[]) private _donateIdsByWallet;
+
     // 배포 된 ERC-20 토큰 계약 주소
     address private _currencyContractAddress;
+    // ERC20 객체화
+    IERC20 private _currencyContract;
+
     // 배포 된 AnimalNftSale 계약 주소
-    address private _animalNftSaleContractAddress;   
+    address private _animalNftSaleContractAddress; 
+    AnimalNftSale private _animalNftSaleContract;
+     
     // 배포 된 AnimalNft(ERC-721) 토큰 계약 주소
     address private _animalNftContractAddress;
+    // PRIVATE 서버의 AnimalNft(ERC-721) 객체화
+    AnimalNft private _animalNftContract;    
  
     
     /*
@@ -87,7 +111,7 @@ contract AnimalNftSaleFactory is Ownable {
             1. 글 등록자가 동물 Id를 실제로 소유하는지 확인
             2. 판매 가격은 0을 넘어야 함 
         */
-        require(msg.sender == AnimalNft(_animalNftContractAddress).getOwner(animalId), "Animal NFT is not owned by Register");
+        require(msg.sender == AnimalNft(_animalNftContractAddress)._getOwner(animalId), "Animal NFT is not owned by Register");
         require(price > 0, "You must set price over 0");
         
         //거래 번호 증가
@@ -95,7 +119,7 @@ contract AnimalNftSaleFactory is Ownable {
         uint256 newAnimalNftSaleId = _saleIds.current();
 
         //거래 객체 생성
-        AnimalNftSale newAnimalNftSale = new AnimalNftSale(_currencyContractAddress, animalId, msg.sender, price, startedAt, endedAt);
+        AnimalNftSale newAnimalNftSale = new AnimalNftSale(_currencyContractAddress, _animalNftContractAddress, animalId, msg.sender, price, startedAt, endedAt);
 
         //ERC721 계약에 의해 animalId는 현 계약서로만 거래가 가능하다.
         AnimalNft(_animalNftContractAddress).approve(address(newAnimalNftSale), animalId);
@@ -104,12 +128,43 @@ contract AnimalNftSaleFactory is Ownable {
             1. 계약서 주소
             2. 작성자
         */
-        Sale memory newSale = new Sale(address(newAnimalNftSale), msg.sender);
-        _sales[_saleIds] = newSale; 
+        Sale memory newSale = Sale(address(newAnimalNftSale), msg.sender);
+        _sales[_saleIds.current()] = newSale; 
         _salesByAnimal[animalId].push(newAnimalNftSaleId);
         _saleIdsByWallet[msg.sender].push(newAnimalNftSaleId);
 
         //emit SaleCreated(newAnimalNftSaleId, address(newAnimalNftSale), animalId);
+    }
+
+    /*
+    * donate
+    * Donate를 위한 메서드
+    * @ param none
+    * @ return animalId
+    */
+    function donate(
+            uint256 mintedAt
+    ) public returns (uint256){
+
+        //거래 객체 생성
+        AnimalNftDonate newAnimalNftDonate = new AnimalNftDonate(_currencyContractAddress, _animalNftContractAddress, msg.sender, mintedAt);
+        uint256 newAnimalId = newAnimalNftDonate.donate();
+        /* Donate Struct에 값 저장
+            1. 계약서 주소
+            2. 작성자
+        */
+
+        // 완료되면 기부 번호 증가
+        _donateIds.increment();
+        uint256 newAnimalNftDonateId = _donateIds.current();
+
+        Donate memory newDonate = Donate(address(newAnimalNftDonate), msg.sender);
+        _donates[_donateIds.current()] = newDonate; 
+        _donateIdsByWallet[msg.sender].push(newAnimalNftDonateId);
+
+        //emit DonateCreated(newAnimalNftDonateId, address(newAnimalNftDonate), newAnimalNftDonateId);
+
+        return newAnimalId;
     }
 
     /*
