@@ -36,7 +36,6 @@ contract AnimalNft is ERC721URIStorage, Ownable {
     //const 키워드를 활용해 명시가능
     uint256 constant LIMITED_NUMBER = 22000;
 
-
     //uint256 test;
     //남아있는 동물의 값들 저장: 최초발행 22000개
     AnimalInfo[] LIMITED_ANIMALS; //최초값을 2차원 배열로 받아야하는데 가스가 미쳐날뛴다.
@@ -78,17 +77,17 @@ contract AnimalNft is ERC721URIStorage, Ownable {
         }
     }
 
-    function _createAnimalNFT (
+    function _createAnimalNft (
         //address recipient
         //string memory tokenURI
-    ) public onlyOwner returns (uint256)
+    ) public returns (uint256)
     {
         //유효성 검사
         require(_tokenIds.current() < 22000, "ALL ANIMALS WERE ISSUED");
         require(LIMITED_ANIMALS[_tokenIds.current()].minter == address(0), "ALREADY ISSUED NFT");
         
         //랜덤으로 동물을 뽑아주는 메서드
-        uint256 random = _randomAnimalNFT();
+        uint256 random = _randomAnimalNft();
 
         //유효성 검사: 민트가 일어나지 않았는지 재확인
         require(LIMITED_ANIMALS[random].minter == address(0), "NFT MINTER ALREADY EXISTS");
@@ -109,7 +108,7 @@ contract AnimalNft is ERC721URIStorage, Ownable {
     }
 
     
-    function _randomAnimalNFT(  
+    function _randomAnimalNft(  
     ) private view returns(uint){
         //방법1
         //Solidity는 deterministic하다 -> random성을 지양하는 언어
@@ -130,15 +129,15 @@ contract AnimalNft is ERC721URIStorage, Ownable {
         //}
         
         //방법3 = 방법1 + 방법2 = view 키워드를 사용해 gas를 최대한 아끼고 리턴값을 밖으로 빼서 gas를 사용한다.
-        uint256 random = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, _tokenIds.current()))) % (_tokenIds.current());
+        uint256 random = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender,  _tokenIds.current()))) %  LIMITED_ANIMALS.length;
         //특정 random수를 임의로 정하고 앞으로 이동하면서 가장 가까운 숫자를 번호로 뽑아낸다.
-        for(uint256 i = random; i<LIMITED_ANIMALS.length; i++){
+        for(uint256 i = random ; i < random +  LIMITED_ANIMALS.length; i++){
             //민트자가 정해지지 않았다면 채택
-            if(LIMITED_ANIMALS[(i % LIMITED_ANIMALS.length)].minter == address(0)){ 
+            if(LIMITED_ANIMALS[ i % LIMITED_ANIMALS.length].minter == address(0)){ 
                 return i;
             }
         }
-        
+
         return random;
         //delete LIMITED_ANIMALS
         

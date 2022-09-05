@@ -37,6 +37,10 @@ contract AnimalNftSale is Ownable, IERC721Receiver {
     //판매 완료 표기
     bool private _isClosed;
 
+    /* 
+        민트 관련 정보 저장
+    */
+
     // PRIVATE 서버의 Contract(ERC20) 주소
     address private _currencyContractAddress;
     // ERC20 객체화
@@ -44,7 +48,8 @@ contract AnimalNftSale is Ownable, IERC721Receiver {
     // PRIVATE 서버의 NftContract주소(ERC-721)
     address private _animalNftContractAddress;
     // PRIVATE 서버의 AnimalNft(ERC-721) 객체화
-    AnimalNft private _animalNftContract;    
+    AnimalNft private _animalNftContract;
+    
     
     /*
     * constructor
