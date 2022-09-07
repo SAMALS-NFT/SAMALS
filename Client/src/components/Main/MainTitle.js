@@ -2,9 +2,9 @@ import React, {
     useState,
     useEffect,
 } from "react";
-import "../styles/Hero.css";
+import "../../styles/Hero.css";
 import { useNavigate } from "react-router-dom";
-import Header from "./Header";
+import Header from "../Header";
 
 const MainTitle =
     () => {
@@ -30,25 +30,22 @@ const MainTitle =
 
                 <Header />
 
+                <h3 id="header-text-second">
+                    {" "}
+                    SAVE
+                    THE
+                    ANIMALS{" "}
+                </h3>
                 <h1 id="header-text-first">
                     {" "}
-                    samals{" "}
-                </h1>
-                <h1 id="header-text-second">
-                    {" "}
-                    팀
-                    올청이
-                    폰트왜이래
+                    SAMALS
                 </h1>
                 <h5 id="header-subtext">
-                    Craft,
-                    hunt
-                    and
-                    trade
-                    NFT's
-                    in
-                    the
-                    dark
+                    Start
+                    your
+                    NFT
+                    collection
+                    now
                 </h5>
 
                 <div id="hero-buttons">

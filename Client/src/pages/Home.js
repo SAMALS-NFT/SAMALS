@@ -1,6 +1,12 @@
 import react from "react";
-import MainTitle from "../components/MainTitle";
-import MainSub from "../components/MainSub";
+import MainTitle from "../components/Main/MainTitle";
+import MainSub from "../components/Main/MainSub";
+import MainVision from "../components/Main/MainVision";
+import MainNFT from "../components/Main/MainNFT";
+import MainToken from "../components/Main/MainToken";
+import MainRoadMap from "../components/Main/MainRoadMap";
+import MainTeam from "../components/Main/MainTeam";
+
 import "../styles/Home.css";
 import CardList from "../components/CardList";
 import { hotDropsData } from "../constants/MockupData";
@@ -14,6 +20,11 @@ const Home = () => {
                 }
             />
             <MainSub />
+            <MainNFT />
+            <MainVision />
+            <MainToken />
+            <MainRoadMap />
+            <MainTeam />
             <p id="card-list-header-text">
                 {" "}
                 Hot
