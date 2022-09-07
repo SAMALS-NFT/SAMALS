@@ -20,7 +20,7 @@ const Header = () => {
 
       <div id="link-containers">
         <a>게임</a>
-        <Link to="./explore">상점</Link>
+        <Link to="/explore">상점</Link>
         <a>거래소</a>
         <a>기부</a>
         <a>Craft NFT</a>
