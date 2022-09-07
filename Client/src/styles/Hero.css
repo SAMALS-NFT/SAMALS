@@ -127,7 +127,7 @@ a {
 
 #header-text-first {
     margin-top: 90px;
-    font-size: 90px;
+    font-size: 120px;
     font-family: -apple-system,
         BlinkMacSystemFont,
         "Segoe UI",
@@ -138,17 +138,18 @@ a {
         "Open Sans",
         "Helvetica Neue",
         sans-serif;
-    color: #00fc28;
-    font-family: "Rock Salt",
+    color: #fea202;
+    font-family: "Press Start 2P",
         cursive;
 }
 
 #header-text-second {
     font-size: 56px;
 
-    color: #ffffff;
-    font-family: "Rock Salt",
-        cursive;
+    color: #00fc28;
+    font-family: "Black Han Sans",
+        sans-serif;
+
     margin-top: 30px;
 }
 
@@ -277,7 +278,7 @@ button#create {
             "Open Sans",
             "Helvetica Neue",
             sans-serif;
-        color: #ffffff;
+        color: #fea202;
         font-family: "Rock Salt",
             cursive;
     }
@@ -285,8 +286,8 @@ button#create {
     #header-text-second {
         font-size: 36px;
 
-        color: #ffffff;
-        font-family: "Rock Salt",
+        color: #00fc28;
+        font-family: "Press Start 2P",
             cursive;
         margin-top: 20px;
     }
