@@ -3,7 +3,8 @@ import { useEffect } from "react";
 import Header from "../components/Header";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
-import bg from "../assets/donate.png";
+import bg from "../assets/madagascar.png";
+import bg2 from "../assets/bg-05.png";
 import Button1 from "../components/Game/Button1";
 import Button2 from "../components/Game/Button2";
 import { Unity, useUnityContext } from "react-unity-webgl";
@@ -40,7 +41,7 @@ const Game = () => {
           borderRadius: 50,
         }}
       />
-      ;
+      <img width='100%' src={bg2} />
     </div>
   );
 };

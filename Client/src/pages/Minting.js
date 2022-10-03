@@ -17,7 +17,7 @@ const Minting = () => {
       <RatingData />
       <MintingButton />
       <AnimalData />
-      {/* <MintingModal /> */}
+      <MintingModal />
     </div>
   );
 };

@@ -4,9 +4,9 @@ import Header from "../../components/Header";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import bg from "../../assets/donate.png";
-import buttonImg from "../../assets/animal-button.png";
+import buttonImg from "../../assets/game-button01.png";
 import Modal from "@mui/material/Modal";
-import modalBack from "../../assets/modal-back.jpg";
+import modalBack from "../../assets/game-background.jpg";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { Unity, useUnityContext } from "react-unity-webgl";
@@ -19,7 +19,6 @@ const style = {
   width: 800,
   height: 500,
   bgcolor: "background.paper",
-  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
   backgroundImage: `url(${modalBack})`,
@@ -43,7 +42,7 @@ const Button1 = () => {
         aria-describedby='modal-modal-description'
       >
         <Box sx={style}>
-          <h1>안녕</h1>
+          <h1>마다가스카르 소개 컨텐츠 작성</h1>
         </Box>
       </Modal>
     </div>
